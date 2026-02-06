@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Booking Pro – نظام حجز المواعيد</title>
+  <style>
+    /* ===== CSS كامل ===== */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      color: white;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    header a {
+      display: inline-block;
+      text-decoration: none;
+      color: #764ba2;
+      background: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    header a:hover { background: #f1f1f1; }
+    .container {
+      background: white;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+    h2 { text-align: center; margin-bottom: 20px; color: #333; }
+    label { display: block; margin-top: 15px; color: #555; }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background: #5a67d8; }
+    #successMsg {
+      text-align: center;
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .card {
+      background: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    @media(max-width: 650px){
+      .container { margin: 20px; padding: 20px; }
+      header h1 { font-size: 2em; }
+    }
+
+    .doctor img{
+        width: 500px;
+        height: 300px;
+        margin: 20px;
+    }
+
+    
+
+  </style>
+</head>
+<body>
+
+  <!-- الصفحة الرئيسية -->
+  <header>
+    <h1>نظام Smart Booking Pro</h1>
+    <p>إدارة الحجوزات بسهولة، إرسال مباشر على واتساب، ودعم عربي + إنجليزي</p>
+    <a href="#booking">احجز الآن</a>
+    <div class="doctor">
+        <img src="doctor.jpg"/>
+    </div>
+  </header>
+
+  <!-- مميزات النظام -->
+  <section class="features">
+    <div class="card">إرسال تلقائي على واتساب</div>
+    <div class="card">حفظ الحجوزات محليًا</div>
+    <div class="card">تصميم عصري متجاوب</div>
+  </section>
+
+  <!-- نموذج الحجز -->
+  <div class="container" id="booking">
+    <h2>احجز موعدك</h2>
+    <form id="bookingForm">
+      <label>الاسم</label>
+      <input type="text" id="name" placeholder="اسمك" required>
+      <label>رقم الهاتف</label>
+      <input type="tel" id="phone" placeholder="رقم هاتفك" required>
+      <label>الخدمة</label>
+      <select id="service">
+        <option>استشارة</option>
+        <option>كشف</option>
+        <option>متابعة</option>
+      </select>
+      <label>التاريخ</label>
+      <input type="date" id="date" required>
+      <label>الوقت</label>
+      <input type="time" id="time" required>
+      <button type="submit">تأكيد الحجز</button>
+    </form>
+    <p id="successMsg"></p>
+  </div>
+
+  <!-- ===== JavaScript كامل ===== -->
+  <script>
+    // حفظ الحجوزات في LocalStorage
+    let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+
+    document.getElementById("bookingForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      let name = document.getElementById("name").value;
+      let phone = document.getElementById("phone").value;
+      let service = document.getElementById("service").value;
+      let date = document.getElementById("date").value;
+      let time = document.getElementById("time").value;
+
+      let booking = { name, phone, service, date, time };
+      bookings.push(booking);
+      localStorage.setItem('bookings', JSON.stringify(bookings));
+
+      // رسالة واتساب
+      let message = `حجز جديد:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالخدمة: ${service}%0Aالتاريخ: ${date}%0Aالوقت: ${time}`;
+      let businessPhone = "201151115664"; // ضع رقم واتساب هنا
+      window.open(`https://wa.me/${businessPhone}?text=${message}`, "_blank");
+
+      document.getElementById("successMsg").innerText = "تم إرسال الحجز بنجاح عبر واتساب ✅";
+      document.getElementById("bookingForm").reset();
+    });
+  </script>
+
+</body>
+</html>
